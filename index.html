@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignalR Client</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+  </head>
+  <body>
+    <h1>SignalR Client</h1>
+    <div id="messages"></div>
+
+    <script>
+      // URL do servidor SignalR
+      const signalRUrl = "https://api.beyond.aero/simulator";
+
+      // Configuração do cliente SignalR
+      const connection = new signalR.HubConnectionBuilder()
+        .withUrl(signalRUrl, {
+          withCredentials: false, // Não incluir credenciais na solicitação
+        })
+        .build();
+
+      // Função para receber mensagens do servidor
+      connection.on("4eyJh", (message) => {
+        console.log("Received message:", message);
+        document.getElementById("messages").innerHTML += `<p>${message}</p>`;
+      });
+
+      // Iniciar conexão com o servidor
+      connection
+        .start()
+        .then(() => {
+          console.log("Connected to SignalR server");
+        })
+        .catch((error) => {
+          console.error("Error connecting to SignalR server:", error);
+        });
+    </script>
+  </body>
+</html>
